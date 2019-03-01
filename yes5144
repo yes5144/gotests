@@ -1,4 +1,5 @@
-yes5144
-I am wangkkkkk
-This is my first using Jenkins
-Please 
+echo "yes5144\
+I am wangkkkkk\
+This is my first using Jenkins\
+Please" 
+echo $(date +%F_%T)
