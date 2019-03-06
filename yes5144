@@ -1,5 +1,48 @@
-echo "yes5144\
-I am wangkkkkk\
-This is my first using Jenkins\
-Please" 
+#!/bin/bash
+# coding: utf8
 echo $(date +%F_%T)
+
+## 镜像加速-daocloud
+curl -sSL https://get.daocloud.io/daotools/set_mirror.sh | sh -s http://43049fd0.m.daocloud.io
+
+:<<!
+被注释的多行内容 
+yum install docker
+yum install docker-ce
+yum install docker
+cat /etc/docker/daemon.json
+{
+      "registry-mirrors": ["https://registry.docker-cn.com"]
+}
+service docker restart
+docker search gitlab
+docker pull docker.io/gitlab/gitlab-ce
+!
+
+### centos7--jenkins
+docker run -d \
+  -p 8888:8080 \
+  -p 50000:50000 \
+  -v /opt/data/jenkins_home/:/var/jenkins_home \
+  --name jenkins8888  \
+  jenkins/jenkins:lts
+
+### centos7--gitlab
+docker run -d \
+  --hostname gitlab.example.com \
+  -p 443:443 \
+  -p 8080:80 \
+  -p 2222:22 \
+  --name gitlab \
+  --restart always \
+  -v /opt/data/gitlab/config:/etc/gitlab \
+  -v /opt/data/gitlab/logs:/var/log/gitlab \
+  -v /opt/data/gitlab/data:/var/opt/gitlab \
+  -v /etc/localtime:/etc/localtime \
+  gitlab/gitlab-ce:latest
+
+### vim /opt/data/gitlab/config/gitlab.rb
+[root@gitlab config]# cd /opt/data/gitlab/config
+[root@gitlab config]# grep -v "^#" gitlab.rb |grep -v ^$
+external_url 'https://gitlab.example.com'
+
