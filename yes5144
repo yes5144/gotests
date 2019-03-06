@@ -4,7 +4,9 @@ echo $(date +%F_%T)
 
 ## 镜像加速-daocloud
 curl -sSL https://get.daocloud.io/daotools/set_mirror.sh | sh -s http://43049fd0.m.daocloud.io
-
+## stop firewalld
+systemctl stop firewalld
+systemctl disabled firewalld
 :<<!
 被注释的多行内容 
 yum install docker
@@ -45,4 +47,22 @@ docker run -d \
 [root@gitlab config]# cd /opt/data/gitlab/config
 [root@gitlab config]# grep -v "^#" gitlab.rb |grep -v ^$
 external_url 'https://gitlab.example.com'
+
+### gitlab-zh
+docker run -d \
+  --hostname gitlab.channel.com \
+  -p 4443:443 \
+  -p 8888:80 \
+  -p 22222:22 \
+  --name gitlab_zh \
+  --restart always \
+  -v /opt/data/gitlab_zh/config:/etc/gitlab \
+  -v /opt/data/gitlab_zh/logs:/var/log/gitlab \
+  -v /opt/data/gitlab_zh/data:/var/opt/gitlab \
+  -v /etc/localtime:/etc/localtime \
+  twang2218/gitlab-ce-zh:latest
+  
+## 使用默认的gitlab.rb
+## 直接访问即可：http://gitlab.channel.com:8888
+
 
